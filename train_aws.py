@@ -3,6 +3,9 @@ import sys
 import os
 import os.path as osp
 
+import boto3
+from datetime import datetime
+
 import numpy as np
 
 import torch
@@ -63,6 +66,13 @@ def test(net, device, test_loader):
     accuracy = 100. * true_positives / len(test_loader.dataset)
     return test_loss, accuracy
 
+### Save model to S3
+def saveS3(local_file, args):
+    s3 = boto3.client('s3', aws_access_key_id=args.access_key,
+                      aws_secret_access_key=args.secret_key)
+    version = 'cifar10-' + datetime.now().strftime("%y%m%d-%H%M%S") + '.pt'
+    s3.upload_file(local_file, args.bucket, version)
+
 ### Main
 def main(args):
     """ Main function
@@ -104,6 +114,7 @@ def main(args):
     print('# Save model')
     path = os.path.join(args.model_dir, "cifar10_cnn.pt")
     torch.save(net.state_dict(), path)
+    saveS3(path, args)
 
 
 if __name__ == "__main__":
@@ -116,5 +127,8 @@ if __name__ == "__main__":
 
     # Container environment
     parser.add_argument("--model-dir", type=str, default=os.getenv('SM_MODEL_DIR', '.'))
+    parser.add_argument("--access-key", type=str, default=os.getenv('ACCESS_KEY', '.'))
+    parser.add_argument("--secret-key", type=str, default=os.getenv('SECRET_KEY', '.'))
+    parser.add_argument("--bucket", type=str, default=os.getenv('BUCKET', '.'))
 
     main(parser.parse_args())
