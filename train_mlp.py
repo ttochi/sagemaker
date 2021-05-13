@@ -11,6 +11,8 @@ import torch.nn.functional as F
 import torch.optim as optim
 from torchvision import datasets, transforms, models
 
+import mltracker
+
 ### Load image database
 # Torch provides CIFAR10 DB
 CLASSES = ('plane', 'car', 'bird', 'cat', 'deer',
@@ -71,6 +73,10 @@ def main(args):
     batch = args.batch      # batch size
     lr = args.lr            # learning rate
     epochs = args.epochs    # number of training epochs
+    mltracker.log_param('batch', batch)
+    mltracker.log_param('lr', lr)
+    mltracker.log_param('epochs', epochs)
+    mltracker.set_version('pytorch-cnn')
 
     # Set experiment environments
     torch.manual_seed(3) # set random seed for reproducability
@@ -99,11 +105,17 @@ def main(args):
         print(' == Epoch %02d ' % (epoch))
         print('  Train/Test Loss: %.6f / %.6f' % (train_loss, test_loss))
         print('  Test Accuracy: %.2f' % (accuracy))
+        mltracker.log_metric('accracy', accuracy)
+        mltracker.log_metric('train_loss', train_loss)
+        mltracker.log_metric('test_loss', test_loss)
 
     # Save trained weights and the model
     print('# Save model')
     path = os.path.join(args.model_dir, "cifar10_cnn.pt")
     torch.save(net.state_dict(), path)
+
+    mltracker.log_file(path)
+    mltracker.end_run()
 
 
 if __name__ == "__main__":
