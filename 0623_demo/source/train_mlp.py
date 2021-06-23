@@ -66,7 +66,7 @@ def main(args):
     mltracker.log_param('epochs', epochs)
     mltracker.set_version('pytorch-cnn')
     
-    print("\n Hyper parameter: epochs: %d, batch size: %4f, learning rate: %4f".format(epochs, batch, lr))
+    print('# Hyper parameter: epochs: %d, batch size: %.4f, learning rate: %.4f' % (epochs, batch, lr))
 
     # Set experiment environments
     torch.manual_seed(3) # set random seed for reproducability
@@ -126,7 +126,7 @@ if __name__ == "__main__":
     parser.add_argument("--epochs", type=int, default=10)
 
     # Container environment
-    parser.add_argument("--model-dir", type=str, default='./model')
+    parser.add_argument("--model-dir", type=str, default='.')
     parser.add_argument("--data-dir", type=str, default='./data')
 
     main(parser.parse_args())
