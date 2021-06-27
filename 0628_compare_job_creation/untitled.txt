@@ -1,0 +1,22 @@
+Let's start the sagemaker demo first
+
+First, log in to AWS console. And connect to sagemaker dashboard. 
+
+You can check the features of sagemaker in this Menu.
+
+And I will use SageMaker Studio which is the kind of IDE that provide the Integrated development environment of sagemaker.
+
+And open the studio, jupyter lab program will be loaded.
+Because the sagemaker studio is extend of the jupyter lab.
+
+We can run the jupyter notebook in this envrionment.
+
+And I prepared some jupyter notebook files for the demo.
+
+I will show you how to train the model for the 4 types of training that explained earlier.
+
+I will train model using built-in algorithm.
+And, using user created training script.
+And, using user build custom docker image.
+And, using the AWS marketplace algorithm.
+
